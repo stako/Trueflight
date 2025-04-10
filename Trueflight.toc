@@ -1,0 +1,10 @@
+## Interface: 11507
+## Title: Trueflight
+## Notes: A sleek shot timer for Hunters, blending seamlessly with the default UI.
+## Version: alpha-01
+
+Trueflight.xml
+
+Bar.lua
+PlayerState.lua
+Trueflight.lua

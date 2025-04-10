@@ -1,0 +1,54 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Blizzard_SharedXML/UI.xsd">
+  <StatusBar name="TrueflightBarTemplate" hidden="true" drawLayer="BORDER" alpha="0.5" minValue="0" maxValue="1" defaultValue="1" virtual="true">
+    <Size>
+      <AbsDimension x="150" y="10"/>
+    </Size>
+    <Layers>
+      <Layer level="BACKGROUND">
+        <Texture setAllPoints="true">
+          <Color r="0" g="0" b="0" a="0.5"/>
+        </Texture>
+      </Layer>
+      <Layer level="ARTWORK">
+        <Texture parentKey="Border" file="Interface\CastingBar\UI-CastingBar-Border-Small">
+          <Size>
+            <AbsDimension x="0" y="49"/>
+          </Size>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="-23" y="20"/>
+            <Anchor point="TOPRIGHT" x="23" y="20"/>
+          </Anchors>
+        </Texture>
+        <FontString parentKey="Text" inherits="SystemFont_Shadow_Small">
+          <Size>
+            <AbsDimension x="0" y="16"/>
+          </Size>
+          <Anchors>
+            <Anchor point="TOPLEFT" x="0" y="4"/>
+            <Anchor point="TOPRIGHT" x="0" y="4"/>
+          </Anchors>
+        </FontString>
+      </Layer>
+      <Layer level="OVERLAY">
+        <Texture parentKey="Spark" file="Interface\CastingBar\UI-CastingBar-Spark" alphaMode="ADD" hidden="true">
+          <Size>
+            <AbsDimension x="32" y="32"/>
+          </Size>
+          <Anchors>
+            <Anchor point="CENTER" relativeTo="$parent" relativePoint="LEFT" x="0" y="0"/>
+          </Anchors>
+        </Texture>
+      </Layer>
+    </Layers>
+    <Scripts>
+      <OnLoad>
+        self.value = 0
+        self.maxValue = 1
+        self.Spark.offsetY = 0
+      </OnLoad>
+    </Scripts>
+    <BarTexture file="Interface\TargetingFrame\UI-StatusBar"/>
+    <BarColor r="0.7" g="0.7" b="0.7"/>
+  </StatusBar>
+</Ui>
