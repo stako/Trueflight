@@ -23,6 +23,7 @@ EventHandler:RegisterEvent("STOP_AUTOREPEAT_SPELL")
 EventHandler:RegisterEvent("PLAYER_REGEN_ENABLED")
 EventHandler:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player")
+EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", "player")
 EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_FAILED_QUIET", "player")
 
 function EventHandler:ADDON_LOADED(name)
@@ -39,8 +40,6 @@ function EventHandler:COMBAT_LOG_EVENT_UNFILTERED()
     PlayerState.weaponSwapCooldown = false
     PlayerState:UpdateAttackSpeed()
     MainBar:StartCast(PlayerState.autoShotCastTime)
-  elseif subevent == "SPELL_CAST_FAILED" then
-    MainBar:Interrupt()
   end
 end
 
@@ -75,6 +74,12 @@ function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
   if spellId ~= 75 then return end
 
   MainBar:StartCooldown(PlayerState.attackSpeed - PlayerState.autoShotCastTime)
+end
+
+function EventHandler:UNIT_SPELLCAST_INTERRUPTED(unit, castGUID, spellId)
+  if spellId ~= 75 then return end
+
+  MainBar:Interrupt()
 end
 
 function EventHandler:UNIT_SPELLCAST_FAILED_QUIET(unit, castGUID, spellId)
