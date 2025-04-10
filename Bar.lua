@@ -81,8 +81,8 @@ ns.Bar = {
     self.Text:SetText(INTERRUPTED)
   end,
 
-  SetLook = function(self, look)
-    if ( look == "CLASSIC" ) then
+  SetStyle = function(self, style)
+    if style == "CLASSIC" then
       self:SetWidth(195)
       self:SetHeight(13)
       -- border
@@ -99,7 +99,7 @@ ns.Bar = {
       self.Text:SetFontObject("GameFontHighlight")
       -- bar spark
       self.Spark.offsetY = 2
-    elseif ( look == "UNITFRAME" ) then
+    elseif style == "UNITFRAME" then
       self:SetWidth(150)
       self:SetHeight(10)
       -- border
