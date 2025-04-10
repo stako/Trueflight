@@ -8,11 +8,11 @@ local guid = UnitGUID("player")
 local PlayerState = ns.PlayerState
 PlayerState:UpdateAttackSpeed()
 
-local AutoShotBar = ns.Bar:New("AutoShotBar")
-AutoShotBar:SetPoint("CENTER", 0, -90)
+local MainBar = ns.Bar:New("MainBar")
+MainBar:SetPoint("CENTER", 0, -90)
 
-AutoShotBar.oUpdateCooldown = AutoShotBar.UpdateCooldown
-function AutoShotBar:UpdateCooldown(elapsed)
+MainBar.oUpdateCooldown = MainBar.UpdateCooldown
+function MainBar:UpdateCooldown(elapsed)
   self:oUpdateCooldown(elapsed)
   if self.value == 0 then
     PlayerState.weaponSwapCooldown = false
@@ -40,29 +40,29 @@ function EventHandler:COMBAT_LOG_EVENT_UNFILTERED()
   if subevent == "SPELL_CAST_START" then
     PlayerState.weaponSwapCooldown = false
     PlayerState:UpdateAttackSpeed()
-    AutoShotBar:StartCast(PlayerState.autoShotCastTime)
+    MainBar:StartCast(PlayerState.autoShotCastTime)
   elseif subevent == "SPELL_CAST_FAILED" then
-    AutoShotBar:Interrupt()
+    MainBar:Interrupt()
   end
 end
 
 function EventHandler:START_AUTOREPEAT_SPELL()
   PlayerState.isAutoShotting = true
-  AutoShotBar:SetAlpha(1)
+  MainBar:SetAlpha(1)
 end
 
 function EventHandler:STOP_AUTOREPEAT_SPELL()
   PlayerState.isAutoShotting = false
-  AutoShotBar:SetAlpha(0.5)
-  AutoShotBar:SetStatusBarColor(0.7, 0.7, 0.7)
+  MainBar:SetAlpha(0.5)
+  MainBar:SetStatusBarColor(0.7, 0.7, 0.7)
 
   if InCombatLockdown() then return end
 
-  AutoShotBar:Hide()
+  MainBar:Hide()
 end
 
 function EventHandler:PLAYER_REGEN_ENABLED()
-  AutoShotBar:Hide()
+  MainBar:Hide()
 end
 
 function EventHandler:PLAYER_EQUIPMENT_CHANGED(equipmentSlot)
@@ -70,17 +70,17 @@ function EventHandler:PLAYER_EQUIPMENT_CHANGED(equipmentSlot)
 
   PlayerState:UpdateAttackSpeed()
   PlayerState.weaponSwapCooldown = true
-  AutoShotBar:StartCooldown(PlayerState.attackSpeed)
+  MainBar:StartCooldown(PlayerState.attackSpeed)
 end
 
 function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
   if spellId ~= 75 then return end
 
-  AutoShotBar:StartCooldown(PlayerState.attackSpeed - PlayerState.autoShotCastTime)
+  MainBar:StartCooldown(PlayerState.attackSpeed - PlayerState.autoShotCastTime)
 end
 
 function EventHandler:UNIT_SPELLCAST_FAILED_QUIET(unit, castGUID, spellId)
   if spellId ~= 75 or PlayerState.weaponSwapCooldown then return end
 
-  AutoShotBar:StartCooldown(PlayerState.attackSpeed - PlayerState.autoShotCastTime, 0.5)
+  MainBar:StartCooldown(PlayerState.attackSpeed - PlayerState.autoShotCastTime, 0.5)
 end
