@@ -5,15 +5,18 @@ local addonName, ns = ...
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local guid = UnitGUID("player")
 
-local PlayerState = ns.PlayerState
-PlayerState:UpdateAttackSpeed()
+ns.MainBar = ns.AutoShotBar:New("MainBar")
 
-local MainBar = ns.AutoShotBar:New("MainBar")
-MainBar:SetPoint("CENTER", 0, -90)
+local PlayerState = ns.PlayerState
+local MainBar = ns.MainBar
+local Options = ns.Options
+
+PlayerState:UpdateAttackSpeed()
 
 local EventHandler = CreateFrame("Frame")
 EventHandler:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 
+EventHandler:RegisterEvent("ADDON_LOADED")
 EventHandler:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 EventHandler:RegisterEvent("START_AUTOREPEAT_SPELL")
 EventHandler:RegisterEvent("STOP_AUTOREPEAT_SPELL")
@@ -21,6 +24,12 @@ EventHandler:RegisterEvent("PLAYER_REGEN_ENABLED")
 EventHandler:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player")
 EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_FAILED_QUIET", "player")
+
+function EventHandler:ADDON_LOADED(name)
+  if name ~= addonName then return end
+
+  ns.db = Options:GetDB()
+end
 
 function EventHandler:COMBAT_LOG_EVENT_UNFILTERED()
   local _, subevent, _, sourceGUID, _, _, _, _, _, _, _, spellId  = CombatLogGetCurrentEventInfo()
