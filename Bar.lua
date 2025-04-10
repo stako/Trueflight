@@ -121,5 +121,3 @@ ns.Bar = {
     end
   end
 }
-
-ns.Bar.__index = ns.Bar
