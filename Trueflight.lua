@@ -83,7 +83,7 @@ function EventHandler:UNIT_SPELLCAST_INTERRUPTED(unit, castGUID, spellId)
 end
 
 function EventHandler:UNIT_SPELLCAST_FAILED_QUIET(unit, castGUID, spellId)
-  if spellId ~= 75 or PlayerState.weaponSwapCooldown then return end
+  if spellId ~= 75 or PlayerState.weaponSwapCooldown or not IsPlayerMoving() then return end
 
   MainBar:StartCooldown(PlayerState.attackSpeed - PlayerState.autoShotCastTime, 0.5)
 end
