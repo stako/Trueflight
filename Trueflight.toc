@@ -7,4 +7,5 @@ Trueflight.xml
 
 Bar.lua
 PlayerState.lua
+AutoShotBar.lua
 Trueflight.lua

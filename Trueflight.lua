@@ -8,19 +8,8 @@ local guid = UnitGUID("player")
 local PlayerState = ns.PlayerState
 PlayerState:UpdateAttackSpeed()
 
-local MainBar = ns.Bar:New("MainBar")
+local MainBar = ns.AutoShotBar:New("MainBar")
 MainBar:SetPoint("CENTER", 0, -90)
-
-MainBar.oUpdateCooldown = MainBar.UpdateCooldown
-function MainBar:UpdateCooldown(elapsed)
-  self:oUpdateCooldown(elapsed)
-  if self.value == 0 then
-    PlayerState.weaponSwapCooldown = false
-    if not PlayerState.isAutoShotting and not InCombatLockdown() then
-      self:Hide()
-    end
-  end
-end
 
 local EventHandler = CreateFrame("Frame")
 EventHandler:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
