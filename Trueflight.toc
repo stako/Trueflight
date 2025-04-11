@@ -1,6 +1,6 @@
 ## Interface: 11507
 ## Title: Trueflight
-## Notes: A sleek shot timer for Hunters, blending seamlessly with the default UI.
+## Notes: A sleek shot timer for Hunters that just works
 ## SavedVariables: TrueflightDB
 ## Version: alpha-01
 
