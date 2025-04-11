@@ -18,5 +18,11 @@ ns.AutoShotBar = {
         self:Hide()
       end
     end
+  end,
+
+  Dim = function(self)
+    self:SetAlpha(0.5)
+    self:SetStatusBarColor(0.7, 0.7, 0.7)
+    self.Text:SetText()
   end
 }

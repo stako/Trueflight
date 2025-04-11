@@ -50,8 +50,7 @@ end
 
 function EventHandler:STOP_AUTOREPEAT_SPELL()
   PlayerState.isAutoShotting = false
-  MainBar:SetAlpha(0.5)
-  MainBar:SetStatusBarColor(0.7, 0.7, 0.7)
+  MainBar:Dim()
 
   if InCombatLockdown() then return end
 
