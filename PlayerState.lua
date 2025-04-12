@@ -29,6 +29,7 @@ ns.PlayerState = {
       if text then
         local match = text:match(pattern)
         if match then
+          match = match:gsub(",", ".")
           self.weaponsCache[weaponId] = match
           return match
         end
