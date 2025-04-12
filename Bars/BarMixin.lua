@@ -83,3 +83,20 @@ function BarMixin:SetStyle(style)
     self.Spark.offsetY = 0
   end
 end
+
+BarMixin.isTesting = false
+function BarMixin:EnableTestMode(enable)
+  self.isTesting = enable
+  if self.CastTestTimer then self.CastTestTimer:Cancel() end
+  if self.InterruptTestTimer then self.InterruptTestTimer:Cancel() end
+  self:Hide()
+  if not enable then return end
+
+  self:BeginCast(3, self:GetName())
+  C_Timer.After(2, function() self:Interrupt() end)
+
+  self.CastTestTimer = C_Timer.NewTicker(3, function() self:BeginCast(3, self:GetName()) end)
+  self.InterruptTestTimer = C_Timer.NewTicker(3, function()
+    C_Timer.After(2, function() self:Interrupt() end)
+  end)
+end

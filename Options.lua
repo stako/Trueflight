@@ -58,16 +58,10 @@ local function textWithIcon(text, iconId)
 end
 
 local barOptions = {
-  dragNote = {
-    type = "description",
-    name = "Note: During test mode, the bar can be dragged using the mouse",
-    fontSize = "medium",
-    order = 1
-  },
   position = {
     name = "Position",
     type = "group",
-    order = 2,
+    order = 1,
     inline = true,
     get = function(info) return ns.db.profile[info[#info-2]][info[#info-1]][info.arg] end,
     set = function(info, value) ns.db.profile[info[#info-2]][info[#info-1]][info.arg] = value; ns.Options:RefreshConfig(ns.db) end,
@@ -106,7 +100,7 @@ local barOptions = {
   style = {
     name = "Style",
     type = "select",
-    order = 3,
+    order = 2,
     style = "radio",
     values = {
       ["CLASSIC"] = "Classic",
@@ -116,7 +110,7 @@ local barOptions = {
   scale = {
     name = "Scale",
     type = "range",
-    order = 4,
+    order = 3,
     isPercent = true,
     min = 0.1,
     max = 3.0,
@@ -130,16 +124,32 @@ Options.optionsTable = {
   get = function(info) return ns.db.profile[info[#info-1]][info[#info]] end,
   set = function(info, value) ns.db.profile[info[#info-1]][info[#info]] = value; ns.Options:RefreshConfig(ns.db) end,
   args = {
+    testMode = {
+      name = "Toggle Test Mode",
+      type = "execute",
+      order = 1,
+      func = function()
+        ns.AutoShotBar:EnableTestMode(not ns.AutoShotBar.isTesting)
+        ns.CastBar:EnableTestMode(not ns.CastBar.isTesting)
+      end
+    },
+    dragNote = {
+      name = "  Note: During test mode, the bars can be dragged using the mouse",
+      type = "description",
+      order = 2,
+      width = 2.5,
+      fontSize = "medium",
+    },
     autoShotBar = {
       name = textWithIcon("Auto Shot Bar", 132369),
       type = "group",
-      order = 1,
+      order = 3,
       args = barOptions
     },
     castBar = {
       name = textWithIcon("Cast Bar", 135130),
       type = "group",
-      order = 2,
+      order = 4,
       args = barOptions
     }
   }
