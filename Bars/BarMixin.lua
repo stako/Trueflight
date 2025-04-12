@@ -17,6 +17,7 @@ function BarMixin:BeginCast(duration)
   self.Text:SetText()
   self.Spark:SetPoint("CENTER", self, "LEFT", 0, self.Spark.offsetY)
   self.Spark:Show()
+  self:SetAlpha(1)
   self:Show()
   self:SetScript("OnUpdate", self.UpdateCast)
 end
