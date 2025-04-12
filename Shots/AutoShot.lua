@@ -1,7 +1,9 @@
 local addonName, ns = ...
 
+local spellInfo = C_Spell.GetSpellInfo(75)
+
 local PlayerState = ns.PlayerState
-local AutoShot = ns.NewShot()
+local AutoShot = ns.NewShot(spellInfo.name)
 ns.AutoShot = AutoShot
 
 function AutoShot:FinishCast(type)

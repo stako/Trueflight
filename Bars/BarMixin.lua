@@ -8,13 +8,13 @@ function ns.NewBar(name)
   return Mixin(bar, BarMixin)
 end
 
-function BarMixin:BeginCast(duration)
+function BarMixin:BeginCast(duration, text)
   self.value = 0
   self.maxValue = duration
   self:SetMinMaxValues(0, duration)
   self:SetValue(self.value)
   self:SetStatusBarColor(1, 0.7, 0)
-  self.Text:SetText()
+  self.Text:SetText(text)
   self.Spark:SetPoint("CENTER", self, "LEFT", 0, self.Spark.offsetY)
   self.Spark:Show()
   self:SetAlpha(1)

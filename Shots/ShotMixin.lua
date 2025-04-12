@@ -7,8 +7,8 @@ ns.ShotMixin = ShotMixin
 
 ShotMixin.castTime = 0.5
 
-function ns.NewShot()
-  return Mixin({}, ShotMixin)
+function ns.NewShot(shotName)
+  return Mixin({shotName = shotName}, ShotMixin)
 end
 
 function ShotMixin:UpdateCastTime()
@@ -18,7 +18,7 @@ end
 function ShotMixin:BeginCast()
   if not self.bar then return end
 
-  self.bar:BeginCast(self.castTime)
+  self.bar:BeginCast(self.castTime, self.shotName)
 end
 
 function ShotMixin:FinishCast()
