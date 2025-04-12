@@ -6,155 +6,141 @@ function SlashCmdList.TRUEFLIGHT()
   LibStub("AceConfigDialog-3.0"):Open(addonName)
 end
 
-local function buildNameFromSpell(spellId)
-  local spellInfo = C_Spell.GetSpellInfo(spellId)
+local Options = {}
+ns.Options = Options
 
-  -- Auto-Shot icon changes to equipped weapon. Override it
-  if spellId == 75 then spellInfo.iconID = 132369 end
-
-  return "|T"..spellInfo.iconID..":20|t "..spellInfo.name
+function Options:Init()
+  LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable(addonName, self.optionsTable)
+  LibStub("AceConfigDialog-3.0"):AddToBlizOptions(addonName)
+  LibStub("AceConfigDialog-3.0"):SelectGroup(addonName, "bars", "AutoShotBar")
 end
 
-local function buildNameWithIcon(iconId, name)
-  return "|T"..iconId..":20|t "..name
+function Options:InitDB()
+local db = LibStub("AceDB-3.0"):New("TrueflightDB", self.defaults, true)
+  db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
+  db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
+  db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
+  self:RefreshConfig(db)
+  return db
 end
 
-ns.Options = {
-  defaults = {
-    profile = {
-      autoShotBar = {
-        style = "UNITFRAME",
-        scale = 1.0,
-        position = { "UIParent", 0, -90 }
-      },
-      castBar = {
-        style = "UNITFRAME",
-        scale = 1.0,
-        position = { "UIParent", 0, -110 }
-      },
-      autoShot = {
-        bar = "AutoShotBar"
-      },
-      multiShot = {
-        bar = "CastBar"
-      },
-      aimedShot = {
-        bar = "CastBar"
-      }
+function Options:RefreshConfig(db)
+  local object = ns.AutoShotBar
+  local settings = db.profile.autoShotBar
+  object:SetScale(settings.scale)
+  object:SetStyle(settings.style)
+  object:SetPoint("CENTER", unpack(settings.position))
+
+  object = ns.CastBar
+  settings = db.profile.castBar
+  object:SetScale(settings.scale)
+  object:SetStyle(settings.style)
+  object:SetPoint("CENTER", unpack(settings.position))
+end
+
+Options.defaults = {
+  profile = {
+    autoShotBar = {
+      style = "UNITFRAME",
+      scale = 1.0,
+      position = { "UIParent", 0, -190 }
+    },
+    castBar = {
+      style = "CLASSIC",
+      scale = 1.0,
+      position = { "UIParent", 0, -215 }
     }
-  },
+  }
+}
 
-  optionsTable = {
-    name = addonNameColorized,
+local function textWithIcon(text, iconId)
+  return "|T"..iconId..":0|t "..text
+end
+
+local barOptions = {
+  dragNote = {
+    type = "description",
+    name = "Note: During test mode, the bar can be dragged using the mouse",
+    fontSize = "medium",
+    order = 1
+  },
+  position = {
+    name = "Position",
     type = "group",
-    get = function(info) return ns.db.profile[info[2]][info[3]] end,
-    set = function(info, value) ns.db.profile[info[2]][info[3]] = value; ns.Options:RefreshConfig(ns.db) end,
+    order = 2,
+    inline = true,
+    get = function(info) return ns.db.profile[info[#info-2]][info[#info-1]][info.arg] end,
+    set = function(info, value) ns.db.profile[info[#info-2]][info[#info-1]][info.arg] = value; ns.Options:RefreshConfig(ns.db) end,
     args = {
-      bars = {
-        name = "Bars",
+      offsetX = {
+        name = "X Offset",
+        type = "range",
         order = 1,
-        type = "group",
-        args = {
-          autoShotBar = {
-            name = buildNameWithIcon(132369, "Auto Shot Bar"),
-            order = 1,
-            type = "group",
-            args = {
-              style = {
-                name = "Style",
-                order = 1,
-                type = "select",
-                style = "radio",
-                values = {
-                  ["CLASSIC"] = "Classic",
-                  ["UNITFRAME"] = "Unitframe"
-                }
-              },
-              scale = {
-                name = "Scale",
-                order = 2,
-                type = "range",
-                isPercent = true,
-                min = 0.1,
-                max = 3.0,
-                bigStep = 0.1
-              }
-            }
-          },
-          castBar = {
-            name = buildNameWithIcon(135130, "Cast Bar"),
-            order = 2,
-            type = "group",
-            args = {}
-          }
-        }
+        arg = 2,
+        min = -1500,
+        max = 1500,
+        bigStep = 1
       },
-      shots = {
-        name = "Shots",
+      offsetY = {
+        name = "Y Offset",
+        type = "range",
         order = 2,
-        type = "group",
-        args = {
-          autoShot = {
-            name = buildNameFromSpell(75), -- Auto Shot
-            order = 1,
-            type = "group",
-            args = {}
-          },
-          multiShot = {
-            name = buildNameFromSpell(2643), -- Multi-Shot
-            order = 2,
-            type = "group",
-            args = {}
-          },
-          aimedShot = {
-            name = buildNameFromSpell(19434), -- Aimed Shot
-            order = 3,
-            type = "group",
-            args = {}
-          }
+        arg = 3,
+        min = -1500,
+        max = 1500,
+        bigStep = 1
+      },
+      relativeTo = {
+        name = "Relative To",
+        type = "select",
+        order = 3,
+        arg = 1,
+        style = "dropdown",
+        values = {
+          ["UIParent"] = "Center Screen",
+          ["CastingBarFrame"] = "Blizz Cast Bar"
         }
       }
     }
   },
+  style = {
+    name = "Style",
+    type = "select",
+    order = 3,
+    style = "radio",
+    values = {
+      ["CLASSIC"] = "Classic",
+      ["UNITFRAME"] = "Unitframe"
+    }
+  },
+  scale = {
+    name = "Scale",
+    type = "range",
+    order = 4,
+    isPercent = true,
+    min = 0.1,
+    max = 3.0,
+    bigStep = 0.1
+  }
+}
 
-  Init = function(self)
-    LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable(addonName, self.optionsTable)
-    LibStub("AceConfigDialog-3.0"):AddToBlizOptions(addonName)
-    LibStub("AceConfigDialog-3.0"):SelectGroup(addonName, "bars", "AutoShotBar")
-  end,
-
-  InitDB = function(self)
-    local db = LibStub("AceDB-3.0"):New("TrueflightDB", self.defaults, true)
-    db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
-    db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
-    db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
-    self:RefreshConfig(db)
-    return db
-  end,
-
-  RefreshConfig = function(self, db)
-    local object = ns.AutoShotBar
-    local settings = db.profile.autoShotBar
-    object:SetScale(settings.scale)
-    object:SetStyle(settings.style)
-    object:SetPoint("CENTER", unpack(settings.position))
-
-    object = ns.CastBar
-    settings = db.profile.castBar
-    object:SetScale(settings.scale)
-    object:SetStyle(settings.style)
-    object:SetPoint("CENTER", unpack(settings.position))
-
-    object = ns.AutoShot
-    settings = db.profile.autoShot
-    object.bar = ns[settings.bar]
-
-    object = ns.MultiShot
-    settings = db.profile.multiShot
-    object.bar = ns[settings.bar]
-
-    object = ns.AimedShot
-    settings = db.profile.aimedShot
-    object.bar = ns[settings.bar]
-  end
+Options.optionsTable = {
+  name = addonNameColorized,
+  type = "group",
+  get = function(info) return ns.db.profile[info[#info-1]][info[#info]] end,
+  set = function(info, value) ns.db.profile[info[#info-1]][info[#info]] = value; ns.Options:RefreshConfig(ns.db) end,
+  args = {
+    autoShotBar = {
+      name = textWithIcon("Auto Shot Bar", 132369),
+      type = "group",
+      order = 1,
+      args = barOptions
+    },
+    castBar = {
+      name = textWithIcon("Cast Bar", 135130),
+      type = "group",
+      order = 2,
+      args = barOptions
+    }
+  }
 }

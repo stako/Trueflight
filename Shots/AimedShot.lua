@@ -8,6 +8,8 @@ local PlayerState = ns.PlayerState
 local AimedShot = ns.NewShot(spellInfo.name)
 ns.AimedShot = AimedShot
 
+AimedShot.bar = ns.CastBar
+
 function AimedShot:UpdateCastTime()
   self.castTime = baseCastTime / PlayerState.haste
 end
