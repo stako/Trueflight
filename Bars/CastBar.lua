@@ -1,19 +1,19 @@
 local addonName, ns = ...
 
-local AltBar = ns.NewBar("AltBar")
-ns.AltBar = AltBar
-ns.AltBar:SetAlpha(1)
+local CastBar = ns.NewBar("CastBar")
+ns.CastBar = CastBar
+ns.CastBar:SetAlpha(1)
 
 do
   local fadeTime = 0
-  local oInterrupt = AltBar.Interrupt
-  function AltBar:Interrupt()
+  local oInterrupt = CastBar.Interrupt
+  function CastBar:Interrupt()
     oInterrupt(self, elapsed)
     fadeTime = 0
     self:SetScript("OnUpdate", self.UpdateInterrupt)
   end
 
-  function AltBar:UpdateInterrupt(elapsed)
+  function CastBar:UpdateInterrupt(elapsed)
     fadeTime = fadeTime + elapsed
     if fadeTime < 1 then return end
 

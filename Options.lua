@@ -22,24 +22,24 @@ end
 ns.Options = {
   defaults = {
     profile = {
-      mainBar = {
+      autoShotBar = {
         style = "UNITFRAME",
         scale = 1.0,
         position = { "UIParent", 0, -90 }
       },
-      altBar = {
+      castBar = {
         style = "UNITFRAME",
         scale = 1.0,
         position = { "UIParent", 0, -110 }
       },
       autoShot = {
-        bar = "MainBar"
+        bar = "AutoShotBar"
       },
       multiShot = {
-        bar = "AltBar"
+        bar = "CastBar"
       },
       aimedShot = {
-        bar = "AltBar"
+        bar = "CastBar"
       }
     }
   },
@@ -55,8 +55,8 @@ ns.Options = {
         order = 1,
         type = "group",
         args = {
-          mainBar = {
-            name = buildNameWithIcon(136116, "Main Bar"),
+          autoShotBar = {
+            name = buildNameWithIcon(132369, "Auto Shot Bar"),
             order = 1,
             type = "group",
             args = {
@@ -81,8 +81,8 @@ ns.Options = {
               }
             }
           },
-          altBar = {
-            name = buildNameWithIcon(237556, "Alt Bar"),
+          castBar = {
+            name = buildNameWithIcon(135130, "Cast Bar"),
             order = 2,
             type = "group",
             args = {}
@@ -120,7 +120,7 @@ ns.Options = {
   Init = function(self)
     LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable(addonName, self.optionsTable)
     LibStub("AceConfigDialog-3.0"):AddToBlizOptions(addonName)
-    LibStub("AceConfigDialog-3.0"):SelectGroup(addonName, "bars", "mainBar")
+    LibStub("AceConfigDialog-3.0"):SelectGroup(addonName, "bars", "AutoShotBar")
   end,
 
   InitDB = function(self)
@@ -133,14 +133,14 @@ ns.Options = {
   end,
 
   RefreshConfig = function(self, db)
-    local object = ns.MainBar
-    local settings = db.profile.mainBar
+    local object = ns.AutoShotBar
+    local settings = db.profile.autoShotBar
     object:SetScale(settings.scale)
     object:SetStyle(settings.style)
     object:SetPoint("CENTER", unpack(settings.position))
 
-    object = ns.AltBar
-    settings = db.profile.altBar
+    object = ns.CastBar
+    settings = db.profile.castBar
     object:SetScale(settings.scale)
     object:SetStyle(settings.style)
     object:SetPoint("CENTER", unpack(settings.position))

@@ -15,8 +15,8 @@ PlayerState.lua
 
 Bars/BarTemplate.xml
 Bars/BarMixin.lua
-Bars/MainBar.lua
-Bars/AltBar.lua
+Bars/AutoShotBar.lua
+Bars/CastBar.lua
 
 Shots/ShotMixin.lua
 Shots/AutoShot.lua

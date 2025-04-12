@@ -1,9 +1,9 @@
 local addonName, ns = ...
 
-local MainBar = ns.NewBar("MainBar")
-ns.MainBar = MainBar
+local AutoShotBar = ns.NewBar("AutoShotBar")
+ns.AutoShotBar = AutoShotBar
 
-function MainBar:BeginCooldown(duration, initTime)
+function AutoShotBar:BeginCooldown(duration, initTime)
   self.value = initTime or duration
   self.maxValue = duration
   self:SetMinMaxValues(0, duration)
@@ -16,7 +16,7 @@ function MainBar:BeginCooldown(duration, initTime)
   self:SetScript("OnUpdate", self.UpdateCooldown)
 end
 
-function MainBar:UpdateCooldown(elapsed)
+function AutoShotBar:UpdateCooldown(elapsed)
   self.value = self.value - elapsed
   if self.value <= 0 then
     self:SetScript("OnUpdate", nil)
