@@ -38,7 +38,7 @@ end
 
 function AutoShot:HideBar()
   if not self.bar then return end
-  if PlayerState.isAutoShotting or PlayerState.inCombat then return end
+  if PlayerState.isAutoShotting or PlayerState.inCombat or self.bar:GetScript("OnUpdate") then return end
 
   self.bar:Hide()
 end

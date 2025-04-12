@@ -75,10 +75,12 @@ end
 function EventHandler:STOP_AUTOREPEAT_SPELL()
   PlayerState.isAutoShotting = false
   AutoShot:SetEnabled(false)
+  AutoShot:HideBar()
 end
 
 function EventHandler:PLAYER_REGEN_ENABLED()
   PlayerState.inCombat = false
+  AutoShot:HideBar()
 end
 
 function EventHandler:PLAYER_REGEN_DISABLED()
