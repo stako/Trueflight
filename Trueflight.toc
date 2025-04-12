@@ -1,0 +1,28 @@
+## Interface: 11507
+## Title: Trueflight
+## Notes: A sleek shot timer for Hunters that just works
+## SavedVariables: TrueflightDB
+## Version: alpha-01
+
+Libs/LibStub/LibStub.lua
+Libs/CallbackHandler-1.0/CallbackHandler-1.0.lua
+Libs/AceDB-3.0/AceDB-3.0.lua
+Libs/AceGUI-3.0/AceGUI-3.0.xml
+Libs/AceConfigRegistry-3.0/AceConfigRegistry-3.0.lua
+Libs/AceConfigDialog-3.0/AceConfigDialog-3.0.lua
+
+PlayerState.lua
+
+Bars/BarTemplate.xml
+Bars/BarMixin.lua
+Bars/MainBar.lua
+Bars/AltBar.lua
+
+Shots/ShotMixin.lua
+Shots/AutoShot.lua
+Shots/MultiShot.lua
+Shots/AimedShot.lua
+
+Options.lua
+
+Trueflight.lua
