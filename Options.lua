@@ -1,4 +1,5 @@
 local addonName, ns = ...
+if not ns.validEnvironment then return end
 local addonNameColorized = "|cffabd473"..addonName.."|r"
 local ACD = LibStub("AceConfigDialog-3.0")
 

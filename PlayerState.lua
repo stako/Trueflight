@@ -1,4 +1,6 @@
 local addonName, ns = ...
+ns.validEnvironment = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and select(2, UnitClass("player")) == "HUNTER"
+if not ns.validEnvironment then return end
 
 local tooltipName = addonName.."Tooltip"
 local tooltip = CreateFrame("GameTooltip", tooltipName, nil, "GameTooltipTemplate")

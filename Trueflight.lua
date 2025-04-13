@@ -1,9 +1,8 @@
-if WOW_PROJECT_ID ~= WOW_PROJECT_CLASSIC then return end
-if select(2, UnitClass("player")) ~= "HUNTER" then return end
-
 local addonName, ns = ...
+if not ns.validEnvironment then return end
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local guid = UnitGUID("player")
+local firstCast = true
 
 local PlayerState = ns.PlayerState
 local Options = ns.Options
@@ -36,7 +35,6 @@ local EventHandler = CreateFrame("Frame")
 EventHandler:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 
 EventHandler:RegisterEvent("ADDON_LOADED")
-EventHandler:RegisterEvent("PLAYER_ENTERING_WORLD")
 EventHandler:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 EventHandler:RegisterEvent("START_AUTOREPEAT_SPELL")
 EventHandler:RegisterEvent("STOP_AUTOREPEAT_SPELL")
@@ -54,13 +52,6 @@ function EventHandler:ADDON_LOADED(name)
   ns.db = Options:InitDB()
 end
 
-function EventHandler:PLAYER_ENTERING_WORLD(name)
-  PlayerState:UpdateAttackSpeed()
-  AutoShot:UpdateCastTime()
-  MultiShot:UpdateCastTime()
-  AimedShot:UpdateCastTime()
-end
-
 function EventHandler:COMBAT_LOG_EVENT_UNFILTERED()
   local _, subevent, _, sourceGUID, _, _, _, _, _, _, _, spellId  = CombatLogGetCurrentEventInfo()
   if subevent ~= "SPELL_CAST_START" or sourceGUID ~= guid then return end
@@ -68,6 +59,10 @@ function EventHandler:COMBAT_LOG_EVENT_UNFILTERED()
   local shot = shotLookup[spellId]
   if not shot then return end
 
+  if firstCast then
+    firstCast = false
+    self:UNIT_RANGEDDAMAGE()
+  end
   shot:BeginCast()
 end
 
@@ -121,5 +116,9 @@ end
 function EventHandler:UNIT_SPELLCAST_FAILED_QUIET(unit, castGUID, spellId)
   if spellId ~= 75 then return end
 
+  if firstCast then
+    firstCast = false
+    self:UNIT_RANGEDDAMAGE()
+  end
   AutoShot:FinishCast("retry")
 end
