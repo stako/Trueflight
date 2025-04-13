@@ -35,6 +35,6 @@ AutoShotBar.TestTimers = {}
 function AutoShotBar:RunImitation()
   self:BeginCast(0.5, self:GetName())
   self.TestTimers.CooldownTimer = C_Timer.NewTimer(0.5, function() self:BeginCooldown(2.2) end)
-  self.TestTimers.CastTimer = C_Timer.NewTimer(2.7, function() self:BeginCast(0.5, self:GetName()) end)
+  self.TestTimers.CastTimer = C_Timer.NewTimer(2.69, function() self:BeginCast(0.5, self:GetName()) end)
   self.TestTimers.InterruptTimer = C_Timer.NewTimer(3.1, function() self:Interrupt() end)
 end
