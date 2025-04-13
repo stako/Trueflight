@@ -42,18 +42,22 @@ function Options:InitDB()
   return self.db
 end
 
-function Options:RefreshConfig()
-  local object = ns.AutoShotBar
-  local settings = self.db.profile.autoShotBar
-  object:SetScale(settings.scale)
-  object:SetStyle(settings.style)
-  object:SetPoint("CENTER", unpack(settings.position))
+do
+  local bars = {
+    AutoShotBar = "autoShotBar",
+    CastBar = "castBar"
+  }
 
-  object = ns.CastBar
-  settings = self.db.profile.castBar
-  object:SetScale(settings.scale)
-  object:SetStyle(settings.style)
-  object:SetPoint("CENTER", unpack(settings.position))
+  function Options:RefreshConfig()
+    for barName, dbNodeName in pairs(bars) do
+      local bar = ns[barName]
+      local settings = self.db.profile[dbNodeName]
+      bar:SetScale(settings.scale)
+      bar:SetStyle(settings.style)
+      bar:ClearAllPoints()
+      bar:SetPoint("CENTER", unpack(settings.position))
+    end
+  end
 end
 
 Options.defaults = {
@@ -87,6 +91,7 @@ local barOptions = {
         arg = 2,
         min = -1500,
         max = 1500,
+        step = 0.1,
         bigStep = 1
       },
       offsetY = {
@@ -96,6 +101,7 @@ local barOptions = {
         arg = 3,
         min = -1500,
         max = 1500,
+        step = 0.1,
         bigStep = 1
       },
       relativeTo = {

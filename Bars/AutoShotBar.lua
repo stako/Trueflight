@@ -1,6 +1,6 @@
 local addonName, ns = ...
 
-local AutoShotBar = ns.NewBar("AutoShotBar")
+local AutoShotBar = ns.NewBar("AutoShotBar", "autoShotBar")
 ns.AutoShotBar = AutoShotBar
 
 function AutoShotBar:BeginCooldown(duration, initTime)

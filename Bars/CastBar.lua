@@ -1,6 +1,6 @@
 local addonName, ns = ...
 
-local CastBar = ns.NewBar("CastBar")
+local CastBar = ns.NewBar("CastBar", "castBar")
 ns.CastBar = CastBar
 ns.CastBar:SetAlpha(1)
 

@@ -3,8 +3,40 @@ local addonName, ns = ...
 local BarMixin = {}
 ns.BarMixin = BarMixin
 
-function ns.NewBar(name)
+local function setupDrag(self, dbNodeName)
+  self:SetScript("OnMouseDown", function()
+    self:StartMoving()
+    self.isMoving = true
+  end)
+
+  self:SetScript("OnMouseUp", function()
+    self:StopMovingOrSizing()
+    self.isMoving = false
+
+    local settings = ns.db.profile[dbNodeName]
+    local relativeX, relativeY = _G[settings.position[1]]:GetCenter()
+    local selfX, selfY = self:GetCenter()
+    local scale = self:GetScale()
+
+    -- adjust for scale
+    selfX = ((selfX * scale) - relativeX) / scale
+    selfY = ((selfY * scale) - relativeY) / scale
+
+    -- round to 1 decimal place
+    selfX = floor(selfX * 10 + 0.5) / 10
+    selfY = floor(selfY * 10 + 0.5) / 10
+
+    settings.position[2], settings.position[3] = selfX, selfY
+    ns.Options:RefreshConfig()
+    LibStub("AceConfigRegistry-3.0"):NotifyChange(addonName)
+  end)
+
+  self:EnableMouse(false)
+end
+
+function ns.NewBar(name, dbNodeName)
   local bar = CreateFrame("StatusBar", addonName..name, UIParent, "TrueflightBarTemplate")
+  setupDrag(bar, dbNodeName)
   return Mixin(bar, BarMixin)
 end
 
@@ -101,9 +133,11 @@ function BarMixin:EnableTestMode(enable)
   self.isTesting = enable
   if self.TestTimer then self.TestTimer:Cancel() end
   self:StopImitation()
+  self:SetMouseClickEnabled(false)
   self:Hide()
   if not enable then return end
 
+  self:SetMouseClickEnabled(true)
   self:RunImitation()
 
   self.TestTimer = C_Timer.NewTicker(4, function() self:RunImitation() end)
