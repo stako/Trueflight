@@ -7,6 +7,7 @@ local AutoShot = ns.NewShot(spellInfo.name)
 ns.AutoShot = AutoShot
 
 AutoShot.bar = ns.AutoShotBar
+AutoShot.baseCastTime = 0.5
 
 function AutoShot:FinishCast(type)
   if not self.bar then return end

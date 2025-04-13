@@ -5,14 +5,14 @@ local PlayerState = ns.PlayerState
 local ShotMixin = {}
 ns.ShotMixin = ShotMixin
 
-ShotMixin.castTime = 0.5
+ShotMixin.baseCastTime = 0.5
 
 function ns.NewShot(shotName)
   return Mixin({shotName = shotName}, ShotMixin)
 end
 
 function ShotMixin:UpdateCastTime()
-  self.castTime = 0.5 / PlayerState.haste
+  self.castTime = self.baseCastTime / PlayerState.haste
 end
 
 function ShotMixin:BeginCast()

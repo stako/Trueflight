@@ -30,16 +30,13 @@ local shotLookup = {
   [27065] = AimedShot
 }
 
-PlayerState:UpdateAttackSpeed()
-AutoShot:UpdateCastTime()
-MultiShot:UpdateCastTime()
-AimedShot:UpdateCastTime()
 Options:Init()
 
 local EventHandler = CreateFrame("Frame")
 EventHandler:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
 
 EventHandler:RegisterEvent("ADDON_LOADED")
+EventHandler:RegisterEvent("PLAYER_ENTERING_WORLD")
 EventHandler:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
 EventHandler:RegisterEvent("START_AUTOREPEAT_SPELL")
 EventHandler:RegisterEvent("STOP_AUTOREPEAT_SPELL")
@@ -55,6 +52,13 @@ function EventHandler:ADDON_LOADED(name)
   if name ~= addonName then return end
 
   ns.db = Options:InitDB()
+end
+
+function EventHandler:PLAYER_ENTERING_WORLD(name)
+  PlayerState:UpdateAttackSpeed()
+  AutoShot:UpdateCastTime()
+  MultiShot:UpdateCastTime()
+  AimedShot:UpdateCastTime()
 end
 
 function EventHandler:COMBAT_LOG_EVENT_UNFILTERED()
