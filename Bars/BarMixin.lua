@@ -84,19 +84,27 @@ function BarMixin:SetStyle(style)
   end
 end
 
+BarMixin.TestTimers = {}
+function BarMixin:RunImitation()
+  self:BeginCast(4, self:GetName())
+  self.TestTimers.InterruptTimer = C_Timer.NewTimer(3, function() self:Interrupt() end)
+end
+
+function BarMixin:StopImitation()
+  for _, timer in pairs(self.TestTimers) do
+    timer:Cancel()
+  end
+end
+
 BarMixin.isTesting = false
 function BarMixin:EnableTestMode(enable)
   self.isTesting = enable
-  if self.CastTestTimer then self.CastTestTimer:Cancel() end
-  if self.InterruptTestTimer then self.InterruptTestTimer:Cancel() end
+  if self.TestTimer then self.TestTimer:Cancel() end
+  self:StopImitation()
   self:Hide()
   if not enable then return end
 
-  self:BeginCast(3, self:GetName())
-  C_Timer.After(2, function() self:Interrupt() end)
+  self:RunImitation()
 
-  self.CastTestTimer = C_Timer.NewTicker(3, function() self:BeginCast(3, self:GetName()) end)
-  self.InterruptTestTimer = C_Timer.NewTicker(3, function()
-    C_Timer.After(2, function() self:Interrupt() end)
-  end)
+  self.TestTimer = C_Timer.NewTicker(4, function() self:RunImitation() end)
 end
