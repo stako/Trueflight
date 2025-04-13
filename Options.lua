@@ -2,8 +2,16 @@ local addonName, ns = ...
 local addonNameColorized = "|cffabd473"..addonName.."|r"
 
 SLASH_TRUEFLIGHT1, SLASH_TRUEFLIGHT2 = "/trueflight", "/tf"
-function SlashCmdList.TRUEFLIGHT()
-  LibStub("AceConfigDialog-3.0"):Open(addonName)
+function SlashCmdList.TRUEFLIGHT(msg)
+  if msg == "test" then
+    ns.AutoShotBar:EnableTestMode(not ns.AutoShotBar.isTesting)
+    ns.CastBar:EnableTestMode(not ns.CastBar.isTesting)
+  elseif msg == "hide" then
+    ns.AutoShotBar:EnableTestMode(false)
+    ns.CastBar:EnableTestMode(false)
+  else
+    LibStub("AceConfigDialog-3.0"):Open(addonName)
+  end
 end
 
 local function textWithIcon(text, iconId)
