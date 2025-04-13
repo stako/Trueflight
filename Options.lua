@@ -1,5 +1,6 @@
 local addonName, ns = ...
 local addonNameColorized = "|cffabd473"..addonName.."|r"
+local ACD = LibStub("AceConfigDialog-3.0")
 
 SLASH_TRUEFLIGHT1, SLASH_TRUEFLIGHT2 = "/trueflight", "/tf"
 function SlashCmdList.TRUEFLIGHT(msg)
@@ -9,8 +10,10 @@ function SlashCmdList.TRUEFLIGHT(msg)
   elseif msg == "hide" then
     ns.AutoShotBar:EnableTestMode(false)
     ns.CastBar:EnableTestMode(false)
+  elseif ACD.OpenFrames[addonName] then
+    ACD:Close(addonName)
   else
-    LibStub("AceConfigDialog-3.0"):Open(addonName)
+    ACD:Open(addonName)
   end
 end
 
@@ -23,8 +26,8 @@ ns.Options = Options
 
 function Options:Init()
   LibStub("AceConfigRegistry-3.0"):RegisterOptionsTable(addonName, self.optionsTable)
-  LibStub("AceConfigDialog-3.0"):AddToBlizOptions(addonName)
-  LibStub("AceConfigDialog-3.0"):SelectGroup(addonName, "bars", "AutoShotBar")
+  ACD:AddToBlizOptions(addonName)
+  ACD:SelectGroup(addonName, "bars", "AutoShotBar")
 end
 
 function Options:InitDB()
