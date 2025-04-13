@@ -2,7 +2,7 @@
 ## Title: Trueflight
 ## Notes: A sleek shot timer for Hunters that just works
 ## SavedVariables: TrueflightDB
-## Version: alpha-01
+## Version: @project-version@
 
 Libs/LibStub/LibStub.lua
 Libs/CallbackHandler-1.0/CallbackHandler-1.0.lua
