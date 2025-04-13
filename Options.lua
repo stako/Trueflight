@@ -6,6 +6,10 @@ function SlashCmdList.TRUEFLIGHT()
   LibStub("AceConfigDialog-3.0"):Open(addonName)
 end
 
+local function textWithIcon(text, iconId)
+  return "|T"..iconId..":0|t "..text
+end
+
 local Options = {}
 ns.Options = Options
 
@@ -16,23 +20,26 @@ function Options:Init()
 end
 
 function Options:InitDB()
-local db = LibStub("AceDB-3.0"):New("TrueflightDB", self.defaults, true)
-  db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
-  db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
-  db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
-  self:RefreshConfig(db)
-  return db
+  self.db = LibStub("AceDB-3.0"):New("TrueflightDB", self.defaults, true)
+  self.optionsTable.args.profiles = LibStub("AceDBOptions-3.0"):GetOptionsTable(self.db)
+  local profiles = self.optionsTable.args.profiles
+  profiles.name = textWithIcon(profiles.name, 442272)
+  self.db.RegisterCallback(self, "OnProfileChanged", "RefreshConfig")
+  self.db.RegisterCallback(self, "OnProfileCopied", "RefreshConfig")
+  self.db.RegisterCallback(self, "OnProfileReset", "RefreshConfig")
+  self:RefreshConfig()
+  return self.db
 end
 
-function Options:RefreshConfig(db)
+function Options:RefreshConfig()
   local object = ns.AutoShotBar
-  local settings = db.profile.autoShotBar
+  local settings = self.db.profile.autoShotBar
   object:SetScale(settings.scale)
   object:SetStyle(settings.style)
   object:SetPoint("CENTER", unpack(settings.position))
 
   object = ns.CastBar
-  settings = db.profile.castBar
+  settings = self.db.profile.castBar
   object:SetScale(settings.scale)
   object:SetStyle(settings.style)
   object:SetPoint("CENTER", unpack(settings.position))
@@ -53,10 +60,6 @@ Options.defaults = {
   }
 }
 
-local function textWithIcon(text, iconId)
-  return "|T"..iconId..":0|t "..text
-end
-
 local barOptions = {
   position = {
     name = "Position",
@@ -64,7 +67,7 @@ local barOptions = {
     order = 1,
     inline = true,
     get = function(info) return ns.db.profile[info[#info-2]][info[#info-1]][info.arg] end,
-    set = function(info, value) ns.db.profile[info[#info-2]][info[#info-1]][info.arg] = value; ns.Options:RefreshConfig(ns.db) end,
+    set = function(info, value) ns.db.profile[info[#info-2]][info[#info-1]][info.arg] = value; ns.Options:RefreshConfig() end,
     args = {
       offsetX = {
         name = "X Offset",
@@ -122,7 +125,7 @@ Options.optionsTable = {
   name = addonNameColorized,
   type = "group",
   get = function(info) return ns.db.profile[info[#info-1]][info[#info]] end,
-  set = function(info, value) ns.db.profile[info[#info-1]][info[#info]] = value; ns.Options:RefreshConfig(ns.db) end,
+  set = function(info, value) ns.db.profile[info[#info-1]][info[#info]] = value; ns.Options:RefreshConfig() end,
   args = {
     testMode = {
       name = "Toggle Test Mode",
