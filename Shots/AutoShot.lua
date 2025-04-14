@@ -22,7 +22,7 @@ function AutoShot:FinishCast(type)
       self:HideBar()
     end)
   elseif type == "retry" then
-    if PlayerState.weaponSwapCooldown then return end
+    if PlayerState.weaponSwapCooldown or self.bar.value >= 0.5 then return end
 
     self.bar:BeginCooldown(PlayerState.attackSpeed - self.castTime, 0.5)
   else
