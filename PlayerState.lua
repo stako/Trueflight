@@ -12,8 +12,6 @@ ns.PlayerState = {
   isAutoShotting = false,
   inCombat = false,
   weaponsCache = {},
-  weaponSwapCooldown = false,
-  WeaponSwapTimer = nil,
 
   GetBaseSpeed = function(self)
     local weaponId = GetInventoryItemID("player", INVSLOT_RANGED)

@@ -15,14 +15,8 @@ function AutoShot:FinishCast(type)
 
   if type == "weaponSwap" then
     self.bar:BeginCooldown(PlayerState.attackSpeed)
-    PlayerState.weaponSwapCooldown = true
-    if PlayerState.WeaponSwapTimer then PlayerState.WeaponSwapTimer:Cancel() end
-    PlayerState.WeaponSwapTimer = C_Timer.NewTimer(PlayerState.attackSpeed, function()
-      PlayerState.weaponSwapCooldown = false
-      self:HideBar()
-    end)
   elseif type == "retry" then
-    if PlayerState.weaponSwapCooldown or self.bar.value >= 0.5 then return end
+    if self.bar.value >= 0.5 then return end
 
     self.bar:BeginCooldown(PlayerState.attackSpeed - self.castTime, 0.5)
   else
