@@ -24,12 +24,6 @@ function AutoShot:FinishCast(type)
   end
 end
 
-function AutoShot:StartRetry()
-  if not self.bar then return end
-
-  self.bar:StartCooldown(PlayerState.attackSpeed - PlayerState.autoShotCastTime, 0.5)
-end
-
 function AutoShot:SetEnabled(enable)
   if not self.bar then return end
 
