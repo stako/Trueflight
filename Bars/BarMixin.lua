@@ -70,6 +70,7 @@ end
 
 function BarMixin:Interrupt()
   self:SetScript("OnUpdate", nil)
+  self.value = 0
   self:SetValue(self.maxValue)
   self:SetStatusBarColor(1, 0, 0)
   self.Spark:Hide()
