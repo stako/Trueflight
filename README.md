@@ -24,6 +24,11 @@ Yes. Positioning and scaling can be adjusted via the /trueflight options GUI. Wh
 **Does it work for other classes?**  
 No. Trueflight is tailored specifically for Hunters and their unique shot mechanics.
 
+**Why does the auto shot bar stutter during the cooldown period?**  
+This happens if you try to cast Auto Shot while it's already active. Typically this would be from an instant shot (Arcane/Chimera/Explosive Shot) macro that has Auto Shot included in it. Using such a macro will trigger Auto Shot's retry timer, which can delay your next Auto Shot by up to 0.5 seconds. See point #4 from Sixx's article on the Blizzard forums [here](https://us.forums.blizzard.com/en/wow/t/classic-hunter-the-retry-timer/542470).
+
+TLDR: Remove `/cast !Auto Shot` from your non-Auto Shot macros. It's bad for your DPS.
+
 ## 🛠️ Contributing / Feedback
 
 Have a suggestion or found a bug? Open an issue or submit a pull request on [GitHub](https://github.com/stako/Trueflight).
