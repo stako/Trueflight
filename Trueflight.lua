@@ -36,6 +36,7 @@ EventHandler:SetScript("OnEvent", function(self, event, ...) self[event](self, .
 
 EventHandler:RegisterEvent("ADDON_LOADED")
 EventHandler:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
+EventHandler:RegisterEvent("MIRROR_TIMER_STOP")
 EventHandler:RegisterEvent("START_AUTOREPEAT_SPELL")
 EventHandler:RegisterEvent("STOP_AUTOREPEAT_SPELL")
 EventHandler:RegisterEvent("PLAYER_REGEN_ENABLED")
@@ -64,6 +65,16 @@ function EventHandler:COMBAT_LOG_EVENT_UNFILTERED()
     self:UNIT_RANGEDDAMAGE()
   end
   shot:BeginCast()
+end
+
+function EventHandler:MIRROR_TIMER_STOP(timerName)
+  if timerName ~= "FEIGNDEATH" then return end
+
+  if firstCast then
+    firstCast = false
+    self:UNIT_RANGEDDAMAGE()
+  end
+  AutoShot:FinishCast()
 end
 
 function EventHandler:START_AUTOREPEAT_SPELL()
@@ -101,7 +112,13 @@ end
 
 function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
   local shot = shotLookup[spellId]
+  if spellId == 5384 then shot = AutoShot end
   if not shot then return end
+
+  if firstCast then
+    firstCast = false
+    self:UNIT_RANGEDDAMAGE()
+  end
 
   shot:FinishCast()
 end
