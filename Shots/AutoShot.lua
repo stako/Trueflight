@@ -40,6 +40,10 @@ function AutoShot:SetEnabled(enable)
   if not self.bar then return end
 
   self.bar:SetAlpha(enable and 1 or 0.5)
+  if enable then return end
+
+  self.bar.Text:SetText()
+  self.bar:SetStatusBarColor(0.7, 0.7, 0.7)
 end
 
 function AutoShot:HideBar()
