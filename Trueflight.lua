@@ -44,6 +44,7 @@ EventHandler:RegisterEvent("PLAYER_REGEN_DISABLED")
 EventHandler:RegisterEvent("PLAYER_EQUIPMENT_CHANGED")
 EventHandler:RegisterUnitEvent("UNIT_RANGEDDAMAGE", "player")
 EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_SUCCEEDED", "player")
+EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_FAILED", "player")
 EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", "player")
 EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_FAILED_QUIET", "player")
 
@@ -121,6 +122,15 @@ function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
   end
 
   shot:FinishCast()
+end
+
+function EventHandler:UNIT_SPELLCAST_FAILED(unit, castGUID, spellId)
+  if spellId == 75 then return end
+
+  local shot = shotLookup[spellId]
+  if not shot then return end
+
+  shot:Interrupt()
 end
 
 function EventHandler:UNIT_SPELLCAST_INTERRUPTED(unit, castGUID, spellId)
