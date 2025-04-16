@@ -3,6 +3,13 @@ local addonName, ns = ...
 local AutoShotBar = ns.NewBar("AutoShotBar", "autoShotBar")
 ns.AutoShotBar = AutoShotBar
 
+AutoShotBar.ClipIndicator = AutoShotBar:CreateTexture(nil, "ARTWORK")
+AutoShotBar.ClipIndicator:SetColorTexture(1, 0.4, 0.4)
+AutoShotBar.ClipIndicator:SetBlendMode("MOD")
+AutoShotBar.ClipIndicator:SetPoint("TOPLEFT")
+AutoShotBar.ClipIndicator:SetPoint("BOTTOMLEFT")
+AutoShotBar.ClipIndicator:Hide()
+
 function AutoShotBar:BeginCooldown(duration, initTime)
   self.value = initTime or duration
   self.maxValue = duration
@@ -13,6 +20,8 @@ function AutoShotBar:BeginCooldown(duration, initTime)
   self.Spark:SetPoint("CENTER", self, "RIGHT")
   self.Spark:Show()
   self:Show()
+  self.ClipIndicator:SetWidth(self:GetWidth() * ns.MultiShot.castTime / self.maxValue)
+  self.ClipIndicator:Show()
   self:SetScript("OnUpdate", self.UpdateCooldown)
 end
 
@@ -23,12 +32,26 @@ function AutoShotBar:UpdateCooldown(elapsed)
     self:SetValue(0)
     self.value = 0
     self.Spark:Hide()
+    self.ClipIndicator:Hide()
     ns.AutoShot:HideBar()
     return
   end
 
   self:SetValue(self.value)
-  self.Spark:SetPoint("CENTER", self, "LEFT", (self.value / self.maxValue) * self:GetWidth(), self.Spark.offsetY)
+
+  local currentPosition = self.value / self.maxValue * self:GetWidth()
+  self.Spark:SetPoint("CENTER", self, "LEFT", currentPosition, self.Spark.offsetY)
+  if self.value < ns.MultiShot.castTime then
+    self.ClipIndicator:SetWidth(currentPosition)
+  end
+end
+
+do
+  local oBeginCast = AutoShotBar.BeginCast
+  function AutoShotBar:BeginCast(duration, text)
+    self.ClipIndicator:Hide()
+    oBeginCast(self, duration, text)
+  end
 end
 
 AutoShotBar.TestTimers = {}

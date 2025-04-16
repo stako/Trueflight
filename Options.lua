@@ -57,6 +57,9 @@ do
       bar:SetStyle(settings.style)
       bar:ClearAllPoints()
       bar:SetPoint("CENTER", unpack(settings.position))
+      if dbNodeName == "autoShotBar" then
+        bar.ClipIndicator:SetAlpha(settings.clipIndicator and 1 or 0)
+      end
     end
   end
 end
@@ -66,7 +69,8 @@ Options.defaults = {
     autoShotBar = {
       style = "UNITFRAME",
       scale = 1.0,
-      position = { "UIParent", 0, -190 }
+      position = { "UIParent", 0, -190 },
+      clipIndicator = true
     },
     castBar = {
       style = "CLASSIC",
@@ -131,12 +135,25 @@ local barOptions = {
   scale = {
     name = "Scale",
     type = "range",
-    order = 3,
+    order = 4,
     isPercent = true,
     min = 0.1,
     max = 3.0,
     bigStep = 0.1
   }
+}
+
+local autoShotBarOptions = {}
+for k, v in pairs(barOptions) do
+  autoShotBarOptions[k] = v
+end
+
+autoShotBarOptions.clipIndicator = {
+  name = "Multi-Shot Clip Indicator",
+  desc = "Shows a shaded area that, if Multi-Shot were used in it, would delay your next Auto Shot",
+  type = "toggle",
+  width = "full",
+  order = 3
 }
 
 Options.optionsTable = {
@@ -165,7 +182,7 @@ Options.optionsTable = {
       name = textWithIcon("Auto Shot Bar", 132369),
       type = "group",
       order = 3,
-      args = barOptions
+      args = autoShotBarOptions
     },
     castBar = {
       name = textWithIcon("Cast Bar", 135130),

@@ -6,6 +6,7 @@ local ShotMixin = {}
 ns.ShotMixin = ShotMixin
 
 ShotMixin.baseCastTime = 0.5
+ShotMixin.castTime = 0.5
 
 function ns.NewShot(shotName)
   return Mixin({shotName = shotName}, ShotMixin)
