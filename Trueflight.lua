@@ -29,6 +29,13 @@ local shotLookup = {
   [27065] = AimedShot
 }
 
+local pushbackEvents = {
+	SWING_DAMAGE = true,
+	ENVIRONMENTAL_DAMAGE = true,
+	RANGE_DAMAGE = true,
+	SPELL_DAMAGE = true
+}
+
 Options:Init()
 
 local EventHandler = CreateFrame("Frame")
@@ -55,17 +62,19 @@ function EventHandler:ADDON_LOADED(name)
 end
 
 function EventHandler:COMBAT_LOG_EVENT_UNFILTERED()
-  local _, subevent, _, sourceGUID, _, _, _, _, _, _, _, spellId  = CombatLogGetCurrentEventInfo()
-  if subevent ~= "SPELL_CAST_START" or sourceGUID ~= guid then return end
+  local _, subevent, _, sourceGUID, _, _, _, targetGUID, _, _, _, spellId  = CombatLogGetCurrentEventInfo()
+  if subevent == "SPELL_CAST_START" and sourceGUID == guid then
+    local shot = shotLookup[spellId]
+    if not shot then return end
 
-  local shot = shotLookup[spellId]
-  if not shot then return end
-
-  if firstCast then
-    firstCast = false
-    self:UNIT_RANGEDDAMAGE()
+    if firstCast then
+      firstCast = false
+      self:UNIT_RANGEDDAMAGE()
+    end
+    shot:BeginCast()
+  elseif pushbackEvents[subevent] and targetGUID == guid then
+    AimedShot:Pushback()
   end
-  shot:BeginCast()
 end
 
 function EventHandler:MIRROR_TIMER_STOP(timerName)

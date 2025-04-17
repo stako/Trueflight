@@ -19,18 +19,21 @@ end
 function ShotMixin:BeginCast()
   if not self.bar then return end
 
+  self.isCasting = true
   self.bar:BeginCast(self.castTime, self.shotName)
 end
 
 function ShotMixin:FinishCast()
   if not self.bar then return end
 
+  self.isCasting = false
   self.bar:Success()
 end
 
 function ShotMixin:Interrupt()
   if not self.bar then return end
 
+  self.isCasting = false
   self.bar:Interrupt()
 end
 
