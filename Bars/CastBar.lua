@@ -18,7 +18,7 @@ do
     if fadeTime < 1 then return end
 
     local alpha = self:GetAlpha() - 0.05
-    if alpha >= 0 then
+    if alpha > 0 then
       self:SetAlpha(alpha)
     else
       self:SetScript("OnUpdate", nil)

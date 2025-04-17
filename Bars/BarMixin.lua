@@ -49,6 +49,7 @@ function BarMixin:BeginCast(duration, text)
   self.Text:SetText(text)
   self.Spark:SetPoint("CENTER", self, "LEFT", 0, self.Spark.offsetY)
   self.Spark:Show()
+  self.Flash:Hide()
   self:SetAlpha(1)
   self:Show()
   self:SetScript("OnUpdate", self.UpdateCast)
@@ -77,6 +78,36 @@ function BarMixin:Interrupt()
   self.Text:SetText(INTERRUPTED)
 end
 
+function BarMixin:Success()
+  self:SetValue(self.maxValue)
+  self:SetStatusBarColor(0, 1, 0)
+  self.Spark:Hide()
+  self.Flash:SetAlpha(0)
+  self.Flash:Show()
+  self.flashAnim = true
+  self:SetScript("OnUpdate", self.UpdateSuccess)
+end
+
+function BarMixin:UpdateSuccess(elapsed)
+  if self.flashAnim then
+    local alpha = self.Flash:GetAlpha() + 0.2
+    if alpha < 1 then
+      self.Flash:SetAlpha(alpha)
+    else
+      self.Flash:SetAlpha(1)
+      self.flashAnim = false
+    end
+  else
+    local alpha = self:GetAlpha() - 0.05
+    if alpha > 0 then
+      self:SetAlpha(alpha)
+    else
+      self:SetScript("OnUpdate", nil)
+      self:Hide()
+    end
+  end
+end
+
 function BarMixin:SetStyle(style)
   if style == "CLASSIC" then
     self:SetWidth(195)
@@ -95,6 +126,12 @@ function BarMixin:SetStyle(style)
     self.Text:SetFontObject("GameFontHighlight")
     -- bar spark
     self.Spark.offsetY = 2
+    -- bar flash
+    self.Flash:ClearAllPoints()
+    self.Flash:SetTexture("Interface\\CastingBar\\UI-CastingBar-Flash")
+    self.Flash:SetWidth(256)
+    self.Flash:SetHeight(64)
+    self.Flash:SetPoint("TOP", 0, 28)
   elseif style == "UNITFRAME" then
     self:SetWidth(150)
     self:SetHeight(10)
@@ -114,6 +151,13 @@ function BarMixin:SetStyle(style)
     self.Text:SetFontObject("SystemFont_Shadow_Small")
     -- bar spark
     self.Spark.offsetY = 0
+    -- bar flash
+    self.Flash:ClearAllPoints()
+    self.Flash:SetTexture("Interface\\CastingBar\\UI-CastingBar-Flash-Small")
+    self.Flash:SetWidth(0)
+    self.Flash:SetHeight(49)
+    self.Flash:SetPoint("TOPLEFT", -23, 20)
+    self.Flash:SetPoint("TOPRIGHT", 23, 20)
   end
 end
 

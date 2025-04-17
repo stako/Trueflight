@@ -39,6 +39,18 @@ https://raw.githubusercontent.com/Gethe/wow-ui-source/live/Interface/AddOns/Bliz
             <Anchor point="CENTER" relativeTo="$parent" relativePoint="LEFT" x="0" y="0"/>
           </Anchors>
         </Texture>
+        <Texture parentKey="Flash" file="Interface\CastingBar\UI-CastingBar-Flash" alphaMode="ADD" hidden="true">
+          <Size>
+            <AbsDimension x="256" y="64"/>
+          </Size>
+          <Anchors>
+            <Anchor point="TOP">
+              <Offset>
+                <AbsDimension x="0" y="28"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </Texture>
       </Layer>
     </Layers>
     <Scripts>

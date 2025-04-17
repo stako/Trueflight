@@ -25,7 +25,7 @@ end
 function ShotMixin:FinishCast()
   if not self.bar then return end
 
-  self.bar:Hide()
+  self.bar:Success()
 end
 
 function ShotMixin:Interrupt()
