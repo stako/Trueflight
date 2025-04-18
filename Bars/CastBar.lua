@@ -6,9 +6,8 @@ ns.CastBar:SetAlpha(1)
 
 do
   local fadeTime = 0
-  local oInterrupt = CastBar.Interrupt
   function CastBar:Interrupt()
-    oInterrupt(self, elapsed)
+    ns.BarMixin.Interrupt(self, elapsed)
     fadeTime = 0
     self:SetScript("OnUpdate", self.UpdateInterrupt)
   end

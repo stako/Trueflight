@@ -46,12 +46,9 @@ function AutoShotBar:UpdateCooldown(elapsed)
   end
 end
 
-do
-  local oBeginCast = AutoShotBar.BeginCast
-  function AutoShotBar:BeginCast(duration, text)
-    self.ClipIndicator:Hide()
-    oBeginCast(self, duration, text)
-  end
+function AutoShotBar:BeginCast(duration, text)
+  self.ClipIndicator:Hide()
+  ns.BarMixin.BeginCast(self, duration, text)
 end
 
 AutoShotBar.TestTimers = {}

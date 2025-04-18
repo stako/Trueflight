@@ -19,8 +19,7 @@ function AimedShot:Pushback()
   bar:SetValue(newValue)
 end
 
-local oBeginCast = AimedShot.BeginCast
 function AimedShot:BeginCast()
-  oBeginCast(self)
+  ns.ShotMixin.BeginCast(self)
   pushbackAmount = 1
 end
