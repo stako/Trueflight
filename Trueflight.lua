@@ -29,6 +29,11 @@ local shotLookup = {
   [27065] = AimedShot
 }
 
+local resetLookup = {
+  [5384] = true,  -- Feign Death
+  [19506] = true  -- Trueshot Aura
+}
+
 local pushbackEvents = {
 	SWING_DAMAGE = true,
 	ENVIRONMENTAL_DAMAGE = true,
@@ -122,8 +127,13 @@ end
 
 function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
   local shot = shotLookup[spellId]
-  if spellId == 5384 then shot = AutoShot end
-  if not shot then return end
+  if not shot then
+    if resetLookup[spellId] then
+      shot = AutoShot
+    else
+      return
+    end
+  end
 
   if firstCast then
     firstCast = false
