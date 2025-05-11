@@ -40,3 +40,23 @@ function AutoShot:HideBar()
 
   self.bar:Hide()
 end
+
+AutoShot.resetSpells = {
+  [5384] = true,  -- Feign Death
+  [19506] = true, -- Trueshot Aura
+  [8613] = true,  -- Skinning (Apprentice)
+  [8617] = true,  -- Skinning (Journeyman)
+  [8618] = true,  -- Skinning (Expert)
+  [10768] = true, -- Skinning (Artisan)
+  [32678] = true, -- Skinning (Master)
+  [2575] = true,  -- Mining (Apprentice)
+  [2576] = true,  -- Mining (Journeyman)
+  [3564] = true,  -- Mining (Expert)
+  [10248] = true, -- Mining (Artisan)
+  [29354] = true, -- Mining (Master)
+  [2366] = true,  -- Herb Gathering (Apprentice)
+  [2368] = true,  -- Herb Gathering (Journeyman)
+  [3570] = true,  -- Herb Gathering (Expert)
+  [11993] = true, -- Herb Gathering (Artisan)
+  [28695] = true -- Herb Gathering (Master)
+}
