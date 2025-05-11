@@ -27,13 +27,15 @@ function AutoShot:FinishCast(type)
 end
 
 function AutoShot:SetEnabled(enable)
-  if not self.bar then return end
+  local bar = self.bar
+  if not bar then return end
 
-  self.bar:SetAlpha(enable and 1 or 0.5)
+  bar:SetAlpha(enable and 1 or 0.5)
   if enable then return end
 
-  self.bar.Text:SetText()
-  self.bar:SetStatusBarColor(0.7, 0.7, 0.7)
+  bar.Text:SetText()
+  bar:SetStatusBarColor(0.7, 0.7, 0.7)
+  if not bar:GetScript("OnUpdate") then bar:SetValue(0) end
 end
 
 function AutoShot:HideBar()
