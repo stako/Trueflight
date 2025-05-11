@@ -60,5 +60,6 @@ AutoShot.resetSpells = {
   [2368] = true,  -- Herb Gathering (Journeyman)
   [3570] = true,  -- Herb Gathering (Expert)
   [11993] = true, -- Herb Gathering (Artisan)
-  [28695] = true -- Herb Gathering (Master)
+  [28695] = true, -- Herb Gathering (Master)
+  [6478] = true   -- Opening
 }
