@@ -84,7 +84,7 @@ function EventHandler:MIRROR_TIMER_STOP(timerName)
     firstCast = false
     self:UNIT_RANGEDDAMAGE()
   end
-  AutoShot:FinishCast()
+  AutoShot:FinishCast("noHaste")
 end
 
 function EventHandler:START_AUTOREPEAT_SPELL()
@@ -122,9 +122,11 @@ end
 
 function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
   local shot = shotLookup[spellId]
+  local type
   if not shot then
     if AutoShot.resetSpells[spellId] then
       shot = AutoShot
+      type = "noHaste"
     else
       return
     end
@@ -135,7 +137,7 @@ function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
     self:UNIT_RANGEDDAMAGE()
   end
 
-  shot:FinishCast()
+  shot:FinishCast(type)
 end
 
 function EventHandler:UNIT_SPELLCAST_FAILED(unit, castGUID, spellId)

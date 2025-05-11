@@ -15,6 +15,8 @@ function AutoShot:FinishCast(type)
 
   if type == "weaponSwap" then
     self.bar:BeginCooldown(PlayerState.attackSpeed)
+  elseif type == "noHaste" then
+    self.bar:BeginCooldown(PlayerState.baseAttackSpeed - self.baseCastTime)
   elseif type == "retry" then
     if self.bar.value >= 0.5 then return end
 

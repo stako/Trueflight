@@ -8,6 +8,7 @@ tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 
 ns.PlayerState = {
   attackSpeed = 3.0,
+  baseAttackSpeed = 3.0,
   haste = 1.0,
   isAutoShotting = false,
   inCombat = false,
@@ -39,6 +40,7 @@ ns.PlayerState = {
 
   UpdateAttackSpeed = function(self)
     self.attackSpeed = UnitRangedDamage("player")
-    self.haste = self:GetBaseSpeed() / self.attackSpeed
+    self.baseAttackSpeed = self:GetBaseSpeed()
+    self.haste = self.baseAttackSpeed / self.attackSpeed
   end
 }
