@@ -29,6 +29,17 @@ local shotLookup = {
   [27065] = AimedShot
 }
 
+-- Remove Aimed Shot from Trueflight Castbar in BCC
+if WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+  shotLookup[19434] = nil
+  shotLookup[20900] = nil
+  shotLookup[20901] = nil
+  shotLookup[20902] = nil
+  shotLookup[20903] = nil
+  shotLookup[20904] = nil
+  shotLookup[27065] = nil
+end
+
 local pushbackEvents = {
 	SWING_DAMAGE = true,
 	ENVIRONMENTAL_DAMAGE = true,
@@ -122,11 +133,11 @@ end
 
 function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
   local shot = shotLookup[spellId]
-  local type
+  local resetType
   if not shot then
-    if AutoShot.resetSpells[spellId] then
+    resetType = AutoShot.resetSpells[spellId]
+    if resetType then
       shot = AutoShot
-      type = "noHaste"
     else
       return
     end
@@ -137,7 +148,7 @@ function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
     self:UNIT_RANGEDDAMAGE()
   end
 
-  shot:FinishCast(type)
+  shot:FinishCast(resetType)
 end
 
 function EventHandler:UNIT_SPELLCAST_FAILED(unit, castGUID, spellId)

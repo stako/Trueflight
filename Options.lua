@@ -56,12 +56,21 @@ do
       bar:SetScale(settings.scale)
       bar:SetStyle(settings.style)
       bar:ClearAllPoints()
+      if not _G[settings.position[1]] then settings.position[1] = "UIParent" end
       bar:SetPoint("CENTER", unpack(settings.position))
       if dbNodeName == "autoShotBar" then
         bar.ClipIndicator:SetAlpha(settings.clipIndicator and 1 or 0)
       end
     end
   end
+end
+
+anchorPoints = {
+  ["UIParent"] = "Center Screen",
+  ["CastingBarFrame"] = "Blizz Cast Bar"
+}
+if WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
+  anchorPoints["CastingBarFrame"] = nil
 end
 
 Options.defaults = {
@@ -115,10 +124,7 @@ local barOptions = {
         order = 3,
         arg = 1,
         style = "dropdown",
-        values = {
-          ["UIParent"] = "Center Screen",
-          ["CastingBarFrame"] = "Blizz Cast Bar"
-        }
+        values = anchorPoints
       }
     }
   },

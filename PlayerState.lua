@@ -1,5 +1,9 @@
 local addonName, ns = ...
-ns.validEnvironment = WOW_PROJECT_ID == WOW_PROJECT_CLASSIC and select(2, UnitClass("player")) == "HUNTER"
+local validProjects = {
+  [WOW_PROJECT_CLASSIC] = true,
+  [WOW_PROJECT_BURNING_CRUSADE_CLASSIC] = true
+}
+ns.validEnvironment = validProjects[WOW_PROJECT_ID] and select(2, UnitClass("player")) == "HUNTER"
 if not ns.validEnvironment then return end
 
 local tooltipName = addonName.."Tooltip"

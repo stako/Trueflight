@@ -1,4 +1,4 @@
-## Interface: 11508
+## Interface: 11508, 20505
 ## Title: Trueflight
 ## Notes: A sleek shot timer for Hunters that just works
 ## SavedVariables: TrueflightDB
