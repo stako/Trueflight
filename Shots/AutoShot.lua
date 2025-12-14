@@ -18,12 +18,14 @@ function AutoShot:FinishCast(type)
   elseif type == "noHaste" then
     self.bar:BeginCooldown(PlayerState.baseAttackSpeed - self.baseCastTime)
   elseif type == "retry" then
-    if self.bar.value >= 0.5 then return end
+    if self.isCasting or self.bar.value >= 0.5 then return end
 
     self.bar:BeginCooldown(PlayerState.attackSpeed - self.castTime, 0.5)
   else
     self.bar:BeginCooldown(PlayerState.attackSpeed - self.castTime)
   end
+
+  self.isCasting = false
 end
 
 function AutoShot:SetEnabled(enable)
