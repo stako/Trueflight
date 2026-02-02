@@ -152,11 +152,12 @@ function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
 end
 
 function EventHandler:UNIT_SPELLCAST_FAILED(unit, castGUID, spellId)
-  if spellId == 75 then return end
-
   local shot = shotLookup[spellId]
   if not shot then return end
 
+  if shot == AutoShot then
+    self:STOP_AUTOREPEAT_SPELL()
+  end
   shot:Interrupt()
 end
 
