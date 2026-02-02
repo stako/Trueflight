@@ -1,0 +1,24 @@
+{
+    "diagnostics.globals": [
+        "C_Timer",
+        "floor",
+        "LibStub",
+        "CreateFrame",
+        "UIParent",
+        "Mixin",
+        "INTERRUPTED",
+        "C_Spell",
+        "WOW_PROJECT_ID",
+        "WOW_PROJECT_BURNING_CRUSADE_CLASSIC",
+        "WOW_PROJECT_CLASSIC",
+        "UnitClass",
+        "WorldFrame",
+        "GetInventoryItemID",
+        "INVSLOT_RANGED",
+        "SPEED",
+        "UnitRangedDamage",
+        "SlashCmdList",
+        "CombatLogGetCurrentEventInfo",
+        "UnitGUID"
+    ]
+}

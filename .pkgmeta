@@ -12,6 +12,7 @@ externals:
 ignore:
   - README.md
   - .stylua.toml
+  - .luarc.json
   - Libs/AceConfigDialog-3.0/AceConfigDialog-3.0.xml
   - Libs/AceConfigRegistry-3.0/AceConfigRegistry-3.0.xml
   - Libs/AceDB-3.0/AceDB-3.0.xml
