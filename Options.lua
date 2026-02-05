@@ -69,7 +69,7 @@ do
   end
 end
 
-anchorPoints = {
+local anchorPoints = {
   ["UIParent"] = "Center Screen",
   ["CastingBarFrame"] = "Blizz Cast Bar",
 }
