@@ -1,4 +1,4 @@
-local addonName, ns = ...
+local _, ns = ...
 
 local spellInfo = C_Spell.GetSpellInfo(19434)
 
@@ -10,7 +10,9 @@ AimedShot.baseCastTime = spellInfo.castTime / 1000 + 0.5
 
 local pushbackAmount = 1
 function AimedShot:Pushback()
-  if not self.isCasting then return end
+  if not self.isCasting then
+    return
+  end
 
   local bar = self.bar
   local newValue = math.max(0, bar.value - pushbackAmount)

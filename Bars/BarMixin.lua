@@ -35,7 +35,7 @@ local function setupDrag(self, dbNodeName)
 end
 
 function ns.NewBar(name, dbNodeName)
-  local bar = CreateFrame("StatusBar", addonName..name, UIParent, "TrueflightBarTemplate")
+  local bar = CreateFrame("StatusBar", addonName .. name, UIParent, "TrueflightBarTemplate")
   setupDrag(bar, dbNodeName)
   return Mixin(bar, BarMixin)
 end
@@ -88,7 +88,7 @@ function BarMixin:Success()
   self:SetScript("OnUpdate", self.UpdateSuccess)
 end
 
-function BarMixin:UpdateSuccess(elapsed)
+function BarMixin:UpdateSuccess()
   if self.flashAnim then
     local alpha = self.Flash:GetAlpha() + 0.2
     if alpha < 1 then
@@ -164,7 +164,9 @@ end
 BarMixin.TestTimers = {}
 function BarMixin:RunImitation()
   self:BeginCast(4, self:GetName())
-  self.TestTimers.InterruptTimer = C_Timer.NewTimer(3, function() self:Interrupt() end)
+  self.TestTimers.InterruptTimer = C_Timer.NewTimer(3, function()
+    self:Interrupt()
+  end)
 end
 
 function BarMixin:StopImitation()
@@ -176,14 +178,20 @@ end
 BarMixin.isTesting = false
 function BarMixin:EnableTestMode(enable)
   self.isTesting = enable
-  if self.TestTimer then self.TestTimer:Cancel() end
+  if self.TestTimer then
+    self.TestTimer:Cancel()
+  end
   self:StopImitation()
   self:SetMouseClickEnabled(false)
   self:Hide()
-  if not enable then return end
+  if not enable then
+    return
+  end
 
   self:SetMouseClickEnabled(true)
   self:RunImitation()
 
-  self.TestTimer = C_Timer.NewTicker(4, function() self:RunImitation() end)
+  self.TestTimer = C_Timer.NewTicker(4, function()
+    self:RunImitation()
+  end)
 end

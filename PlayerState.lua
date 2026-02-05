@@ -1,12 +1,14 @@
 local addonName, ns = ...
 local validProjects = {
   [WOW_PROJECT_CLASSIC] = true,
-  [WOW_PROJECT_BURNING_CRUSADE_CLASSIC] = true
+  [WOW_PROJECT_BURNING_CRUSADE_CLASSIC] = true,
 }
 ns.validEnvironment = validProjects[WOW_PROJECT_ID] and select(2, UnitClass("player")) == "HUNTER"
-if not ns.validEnvironment then return end
+if not ns.validEnvironment then
+  return
+end
 
-local tooltipName = addonName.."Tooltip"
+local tooltipName = addonName .. "Tooltip"
 local tooltip = CreateFrame("GameTooltip", tooltipName, nil, "GameTooltipTemplate")
 tooltip:SetOwner(WorldFrame, "ANCHOR_NONE")
 
@@ -20,17 +22,21 @@ ns.PlayerState = {
 
   GetBaseSpeed = function(self)
     local weaponId = GetInventoryItemID("player", INVSLOT_RANGED)
-    if not weaponId then return 1 end
+    if not weaponId then
+      return 1
+    end
 
-    if self.weaponsCache[weaponId] then return self.weaponsCache[weaponId] end
+    if self.weaponsCache[weaponId] then
+      return self.weaponsCache[weaponId]
+    end
 
-    local fontStringBase = tooltipName.."TextRight"
+    local fontStringBase = tooltipName .. "TextRight"
     local pattern = SPEED .. " (%d[%.,]%d%d)"
 
     tooltip:ClearLines()
     tooltip:SetItemByID(weaponId)
     for i = 1, tooltip:NumLines() do
-      local text = _G[fontStringBase..i]:GetText()
+      local text = _G[fontStringBase .. i]:GetText()
       if text then
         local match = text:match(pattern)
         if match then
@@ -46,5 +52,5 @@ ns.PlayerState = {
     self.attackSpeed = UnitRangedDamage("player")
     self.baseAttackSpeed = self:GetBaseSpeed()
     self.haste = self.baseAttackSpeed / self.attackSpeed
-  end
+  end,
 }

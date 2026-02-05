@@ -1,5 +1,7 @@
 local addonName, ns = ...
-if not ns.validEnvironment then return end
+if not ns.validEnvironment then
+  return
+end
 local CombatLogGetCurrentEventInfo = CombatLogGetCurrentEventInfo
 local guid = UnitGUID("player")
 local firstCast = true
@@ -26,7 +28,7 @@ local shotLookup = {
   [20902] = AimedShot,
   [20903] = AimedShot,
   [20904] = AimedShot,
-  [27065] = AimedShot
+  [27065] = AimedShot,
 }
 
 -- Remove Aimed Shot from Trueflight Castbar in BCC
@@ -41,16 +43,18 @@ if WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
 end
 
 local pushbackEvents = {
-	SWING_DAMAGE = true,
-	ENVIRONMENTAL_DAMAGE = true,
-	RANGE_DAMAGE = true,
-	SPELL_DAMAGE = true
+  SWING_DAMAGE = true,
+  ENVIRONMENTAL_DAMAGE = true,
+  RANGE_DAMAGE = true,
+  SPELL_DAMAGE = true,
 }
 
 Options:Init()
 
 local EventHandler = CreateFrame("Frame")
-EventHandler:SetScript("OnEvent", function(self, event, ...) self[event](self, ...) end)
+EventHandler:SetScript("OnEvent", function(self, event, ...)
+  self[event](self, ...)
+end)
 
 EventHandler:RegisterEvent("ADDON_LOADED")
 EventHandler:RegisterEvent("COMBAT_LOG_EVENT_UNFILTERED")
@@ -67,16 +71,20 @@ EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_INTERRUPTED", "player")
 EventHandler:RegisterUnitEvent("UNIT_SPELLCAST_FAILED_QUIET", "player")
 
 function EventHandler:ADDON_LOADED(name)
-  if name ~= addonName then return end
+  if name ~= addonName then
+    return
+  end
 
   ns.db = Options:InitDB()
 end
 
 function EventHandler:COMBAT_LOG_EVENT_UNFILTERED()
-  local _, subevent, _, sourceGUID, _, _, _, targetGUID, _, _, _, spellId  = CombatLogGetCurrentEventInfo()
+  local _, subevent, _, sourceGUID, _, _, _, targetGUID, _, _, _, spellId = CombatLogGetCurrentEventInfo()
   if subevent == "SPELL_CAST_START" and sourceGUID == guid then
     local shot = shotLookup[spellId]
-    if not shot then return end
+    if not shot then
+      return
+    end
 
     if firstCast then
       firstCast = false
@@ -89,7 +97,9 @@ function EventHandler:COMBAT_LOG_EVENT_UNFILTERED()
 end
 
 function EventHandler:MIRROR_TIMER_STOP(timerName)
-  if timerName ~= "FEIGNDEATH" then return end
+  if timerName ~= "FEIGNDEATH" then
+    return
+  end
 
   if firstCast then
     firstCast = false
@@ -119,19 +129,21 @@ function EventHandler:PLAYER_REGEN_DISABLED()
 end
 
 function EventHandler:PLAYER_EQUIPMENT_CHANGED(equipmentSlot)
-  if equipmentSlot ~= INVSLOT_RANGED then return end
+  if equipmentSlot ~= INVSLOT_RANGED then
+    return
+  end
 
   AutoShot:FinishCast("weaponSwap")
 end
 
-function EventHandler:UNIT_RANGEDDAMAGE(unit)
+function EventHandler:UNIT_RANGEDDAMAGE()
   PlayerState:UpdateAttackSpeed()
   AutoShot:UpdateCastTime()
   MultiShot:UpdateCastTime()
   AimedShot:UpdateCastTime()
 end
 
-function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
+function EventHandler:UNIT_SPELLCAST_SUCCEEDED(_, _, spellId)
   local shot = shotLookup[spellId]
   local resetType
   if not shot then
@@ -151,9 +163,11 @@ function EventHandler:UNIT_SPELLCAST_SUCCEEDED(unit, castGUID, spellId)
   shot:FinishCast(resetType)
 end
 
-function EventHandler:UNIT_SPELLCAST_FAILED(unit, castGUID, spellId)
+function EventHandler:UNIT_SPELLCAST_FAILED(_, _, spellId)
   local shot = shotLookup[spellId]
-  if not shot then return end
+  if not shot then
+    return
+  end
 
   if shot == AutoShot then
     self:STOP_AUTOREPEAT_SPELL()
@@ -161,15 +175,19 @@ function EventHandler:UNIT_SPELLCAST_FAILED(unit, castGUID, spellId)
   shot:Interrupt()
 end
 
-function EventHandler:UNIT_SPELLCAST_INTERRUPTED(unit, castGUID, spellId)
+function EventHandler:UNIT_SPELLCAST_INTERRUPTED(_, _, spellId)
   local shot = shotLookup[spellId]
-  if not shot then return end
+  if not shot then
+    return
+  end
 
   shot:Interrupt()
 end
 
-function EventHandler:UNIT_SPELLCAST_FAILED_QUIET(unit, castGUID, spellId)
-  if spellId ~= 75 then return end
+function EventHandler:UNIT_SPELLCAST_FAILED_QUIET(_, _, spellId)
+  if spellId ~= 75 then
+    return
+  end
 
   if firstCast then
     firstCast = false

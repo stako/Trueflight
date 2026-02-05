@@ -9,7 +9,7 @@ ShotMixin.baseCastTime = 0.5
 ShotMixin.castTime = 0.5
 
 function ns.NewShot(shotName)
-  return Mixin({shotName = shotName}, ShotMixin)
+  return Mixin({ shotName = shotName }, ShotMixin)
 end
 
 function ShotMixin:UpdateCastTime()
@@ -17,23 +17,28 @@ function ShotMixin:UpdateCastTime()
 end
 
 function ShotMixin:BeginCast()
-  if not self.bar then return end
+  if not self.bar then
+    return
+  end
 
   self.isCasting = true
   self.bar:BeginCast(self.castTime, self.shotName)
 end
 
 function ShotMixin:FinishCast()
-  if not self.bar then return end
+  if not self.bar then
+    return
+  end
 
   self.isCasting = false
   self.bar:Success()
 end
 
 function ShotMixin:Interrupt()
-  if not self.bar then return end
+  if not self.bar then
+    return
+  end
 
   self.isCasting = false
   self.bar:Interrupt()
 end
-

@@ -1,6 +1,8 @@
 local addonName, ns = ...
-if not ns.validEnvironment then return end
-local addonNameColorized = "|cffabd473"..addonName.."|r"
+if not ns.validEnvironment then
+  return
+end
+local addonNameColorized = "|cffabd473" .. addonName .. "|r"
 local ACD = LibStub("AceConfigDialog-3.0")
 
 SLASH_TRUEFLIGHT1, SLASH_TRUEFLIGHT2 = "/trueflight", "/tf"
@@ -19,7 +21,7 @@ function SlashCmdList.TRUEFLIGHT(msg)
 end
 
 local function textWithIcon(text, iconId)
-  return "|T"..iconId..":0|t "..text
+  return "|T" .. iconId .. ":0|t " .. text
 end
 
 local Options = {}
@@ -46,7 +48,7 @@ end
 do
   local bars = {
     AutoShotBar = "autoShotBar",
-    CastBar = "castBar"
+    CastBar = "castBar",
   }
 
   function Options:RefreshConfig()
@@ -56,7 +58,9 @@ do
       bar:SetScale(settings.scale)
       bar:SetStyle(settings.style)
       bar:ClearAllPoints()
-      if not _G[settings.position[1]] then settings.position[1] = "UIParent" end
+      if not _G[settings.position[1]] then
+        settings.position[1] = "UIParent"
+      end
       bar:SetPoint("CENTER", unpack(settings.position))
       if dbNodeName == "autoShotBar" then
         bar.ClipIndicator:SetAlpha(settings.clipIndicator and 1 or 0)
@@ -67,7 +71,7 @@ end
 
 anchorPoints = {
   ["UIParent"] = "Center Screen",
-  ["CastingBarFrame"] = "Blizz Cast Bar"
+  ["CastingBarFrame"] = "Blizz Cast Bar",
 }
 if WOW_PROJECT_ID == WOW_PROJECT_BURNING_CRUSADE_CLASSIC then
   anchorPoints["CastingBarFrame"] = nil
@@ -79,14 +83,14 @@ Options.defaults = {
       style = "UNITFRAME",
       scale = 1.0,
       position = { "UIParent", 0, -190 },
-      clipIndicator = true
+      clipIndicator = true,
     },
     castBar = {
       style = "CLASSIC",
       scale = 1.0,
-      position = { "UIParent", 0, -215 }
-    }
-  }
+      position = { "UIParent", 0, -215 },
+    },
+  },
 }
 
 local barOptions = {
@@ -95,8 +99,13 @@ local barOptions = {
     type = "group",
     order = 1,
     inline = true,
-    get = function(info) return ns.db.profile[info[#info-2]][info[#info-1]][info.arg] end,
-    set = function(info, value) ns.db.profile[info[#info-2]][info[#info-1]][info.arg] = value; ns.Options:RefreshConfig() end,
+    get = function(info)
+      return ns.db.profile[info[#info - 2]][info[#info - 1]][info.arg]
+    end,
+    set = function(info, value)
+      ns.db.profile[info[#info - 2]][info[#info - 1]][info.arg] = value
+      ns.Options:RefreshConfig()
+    end,
     args = {
       offsetX = {
         name = "X Offset",
@@ -106,7 +115,7 @@ local barOptions = {
         min = -1500,
         max = 1500,
         step = 0.1,
-        bigStep = 1
+        bigStep = 1,
       },
       offsetY = {
         name = "Y Offset",
@@ -116,7 +125,7 @@ local barOptions = {
         min = -1500,
         max = 1500,
         step = 0.1,
-        bigStep = 1
+        bigStep = 1,
       },
       relativeTo = {
         name = "Relative To",
@@ -124,9 +133,9 @@ local barOptions = {
         order = 3,
         arg = 1,
         style = "dropdown",
-        values = anchorPoints
-      }
-    }
+        values = anchorPoints,
+      },
+    },
   },
   style = {
     name = "Style",
@@ -135,8 +144,8 @@ local barOptions = {
     style = "radio",
     values = {
       ["CLASSIC"] = "Classic",
-      ["UNITFRAME"] = "Unitframe"
-    }
+      ["UNITFRAME"] = "Unitframe",
+    },
   },
   scale = {
     name = "Scale",
@@ -145,8 +154,8 @@ local barOptions = {
     isPercent = true,
     min = 0.1,
     max = 3.0,
-    bigStep = 0.1
-  }
+    bigStep = 0.1,
+  },
 }
 
 local autoShotBarOptions = {}
@@ -159,14 +168,19 @@ autoShotBarOptions.clipIndicator = {
   desc = "Shows a shaded area that, if Multi-Shot were used in it, would delay your next Auto Shot",
   type = "toggle",
   width = "full",
-  order = 3
+  order = 3,
 }
 
 Options.optionsTable = {
   name = addonNameColorized,
   type = "group",
-  get = function(info) return ns.db.profile[info[#info-1]][info[#info]] end,
-  set = function(info, value) ns.db.profile[info[#info-1]][info[#info]] = value; ns.Options:RefreshConfig() end,
+  get = function(info)
+    return ns.db.profile[info[#info - 1]][info[#info]]
+  end,
+  set = function(info, value)
+    ns.db.profile[info[#info - 1]][info[#info]] = value
+    ns.Options:RefreshConfig()
+  end,
   args = {
     testMode = {
       name = "Toggle Test Mode",
@@ -175,7 +189,7 @@ Options.optionsTable = {
       func = function()
         ns.AutoShotBar:EnableTestMode(not ns.AutoShotBar.isTesting)
         ns.CastBar:EnableTestMode(not ns.CastBar.isTesting)
-      end
+      end,
     },
     dragNote = {
       name = "  Note: During test mode, the bars can be dragged using the mouse",
@@ -188,13 +202,13 @@ Options.optionsTable = {
       name = textWithIcon("Auto Shot Bar", 132369),
       type = "group",
       order = 3,
-      args = autoShotBarOptions
+      args = autoShotBarOptions,
     },
     castBar = {
       name = textWithIcon("Cast Bar", 135130),
       type = "group",
       order = 4,
-      args = barOptions
-    }
-  }
+      args = barOptions,
+    },
+  },
 }

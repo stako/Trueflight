@@ -14,7 +14,9 @@ do
 
   function CastBar:UpdateInterrupt(elapsed)
     fadeTime = fadeTime + elapsed
-    if fadeTime < 1 then return end
+    if fadeTime < 1 then
+      return
+    end
 
     local alpha = self:GetAlpha() - 0.05
     if alpha > 0 then
